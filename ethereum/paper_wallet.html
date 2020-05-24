@@ -37,7 +37,7 @@ myApp.controller("myCtrl", function($scope) {
 
 	$scope.getHex = () => "0123456789abcdef"[Date.now() % 16]
 	$scope.addHex = () => $scope.entropy += $scope.getHex();
-	$scope.entropyLeft = () => 33-$scope.entropy.length;
+	$scope.entropyLeft = () => 34-$scope.entropy.length;
 
 	$scope.getMnemonic = () => $scope.entropyLeft() == 0 ? 
 		ethers.utils.HDNode.entropyToMnemonic($scope.entropy) : "";
