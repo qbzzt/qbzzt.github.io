@@ -1,0 +1,94 @@
+
+<html>
+<head>
+<title>Create an Ethereum account</title>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+<!--  Angular  -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-sanitize.js"></script>
+
+<!-- Ether -->
+<script src="https://cdn.ethers.io/scripts/ethers-v4.min.js"
+        charset="utf-8" type="text/javascript">
+</script>
+
+    
+<script>
+var myApp = angular.module("myApp", ['ngSanitize']);
+var scope;
+
+myApp.controller("myCtrl", function($scope) {
+	// Make the scope available outside the controller, which is very useful for
+	// debugging
+  	scope = $scope;
+
+	$scope.entropy = '0x';
+
+	$scope.getHex = () => "0123456789abcdef"[Date.now() % 16]
+	$scope.addHex = () => $scope.entropy += $scope.getHex();
+	$scope.entropyLeft = () => 34-$scope.entropy.length;
+
+	$scope.getMnemonic = () => $scope.entropyLeft() == 0 ? 
+		ethers.utils.HDNode.entropyToMnemonic($scope.entropy) : "";
+
+	$scope.getAddr = () => $scope.entropyLeft() == 0 ? 
+		ethers.utils.HDNode.fromMnemonic(
+			ethers.utils.HDNode.entropyToMnemonic($scope.entropy)
+		).derivePath("m/44'/60'/0'/0/0").address : "";
+
+
+});   // myApp.controller
+</script>	
+	
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+      		<h3 class="panel-title">Entropy</h3>
+        </div>
+       	<div class="panel-body">
+		{{entropy}} 
+	</div>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title">Mnemonic</h3>
+	</div>
+	<div class="panel-body">
+		{{getMnemonic()}}
+	</div>
+</div>
+
+
+<div class="panel panel-success">
+	<div class="panel-heading">
+		<h3 class="panel-title">Address</h3>
+	</div>
+	<div class="panel-body">
+		{{getAddr()}}
+	</div>
+</div>
+
+
+<button type="button" 
+	class="btn btn-primary btn-lg" ng-click="addHex()" ng-disabled="entropyLeft() == 0">
+	{{entropyLeft()}} clicks left
+</button>
+
+
+</body>
+</html>
