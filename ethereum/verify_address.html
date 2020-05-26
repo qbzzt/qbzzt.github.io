@@ -79,21 +79,9 @@ myApp.controller("myCtrl", function($scope, $http) {
 </div>
 	
 <div class="alert alert-success" ng-if="checkMnemonic().length == 0">
-	{{getAddr()}}
+	{{getAddr($scope.mnemonic)}}
 </div>
      
-     
-			
-
-<!--	
-<div class="panel panel-info">
-	<div class="panel-heading">
-		<h3 class="panel-title">Word List</h3>
-	</div>
-	<div class="panel-body">
-		{{wordlist}}
-	</div>
-</div>
-	-->
+     			
 </body>
 </html>
