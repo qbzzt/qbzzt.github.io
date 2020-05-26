@@ -54,7 +54,9 @@ myApp.controller("myCtrl", function($scope, $http) {
       		<h3 class="panel-title">The Mnemonic</h3>
         </div>
        	<div class="panel-body">
-		{{mnemonic[0]}} 
+		<div ng-repeat="word in mnemonic">
+			<input type="text" ng-model="word">
+		</div>
 	</div>
 </div>
 
