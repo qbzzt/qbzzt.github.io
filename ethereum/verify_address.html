@@ -29,7 +29,7 @@ var myApp = angular.module("myApp", []);
 var scope;
 	
 	
-myApp.controller("myCtrl", function($scope, $http) {
+myApp.controller("myCtrl", async function($scope, $http) {
 	// Make the scope available outside the controller, which is very useful for
 	// debugging
   	scope = $scope;
@@ -38,10 +38,9 @@ myApp.controller("myCtrl", function($scope, $http) {
 	
 	$scope.wordlist = new Array();
 	
-	$http.get("https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt").
-		then(resp => $scope.wordlist = resp.data);
-
-		
+	resp = await $http.get("https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt");
+	
+	$scope.wordlist = resp.data;
 });   // myApp.controller
 </script>	
 	
@@ -67,7 +66,7 @@ myApp.controller("myCtrl", function($scope, $http) {
 	</div>
 </div>
 
-
+<!--
 <div class="panel panel-success">
 	<div class="panel-heading">
 		<h3 class="panel-title">Address</h3>
@@ -77,6 +76,7 @@ myApp.controller("myCtrl", function($scope, $http) {
 	</div>
 </div>
 
+-->
 
 </body>
 </html>
