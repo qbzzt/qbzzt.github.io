@@ -64,24 +64,17 @@ myApp.controller("myCtrl", function($scope, $http) {
       		<h3 class="panel-title">The Mnemonic</h3>
         </div>
        	<div class="panel-body">
-		<textarea ng-model="mnemonic" ng-list=" " ng-trim="false">
+		<textarea ng-model="mnemonic" ng-list=" " ng-trim="false" rows="5" cols="50">
+		</textarea>
 	</div>
 </div>
 	
 <div class="alert alert-danger" ng-if="checkMnemonic().length > 0">
-	problems
-	<!--
 	<ul class="list-group">
 		<li ng-repeat="err in checkMnemonic()" class="list-group-item">{{err}}</li>
 	</ul>
-
-         -->
 </div>
 	
-	
-<div class="alert alert-success" ng-if="checkMnemonic().length == 0">
-	Happy dance
-	</div>
 
 <!--	
 <div class="panel panel-info">
