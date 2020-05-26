@@ -54,9 +54,13 @@ myApp.controller("myCtrl", function($scope, $http) {
       		<h3 class="panel-title">The Mnemonic</h3>
         </div>
        	<div class="panel-body">
+
+<!--		
 		<div ng-repeat="word in mnemonic track by $index">
 			<input type="text" ng-model="mnemonic[$index]">
 		</div>
+-->
+		<input type="text" ng-model="mnemonic" ng-list=" ">
 	</div>
 </div>
 
