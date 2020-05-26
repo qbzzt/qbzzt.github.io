@@ -52,8 +52,13 @@ myApp.controller("myCtrl", function($scope, $http) {
 		return res;
 	};  // $scope.checkMnemonic
 	
-	$scope.getAddr = mnemonic =>
-		ethers.utils.HDNode.fromMnemonic(mnemonic).derivePath("m/44'/60'/0'/0/0").address;		
+	$scope.getAddr = mnemonic => {
+		try {
+			return ethers.utils.HDNode.fromMnemonic(mnemonic).derivePath("m/44'/60'/0'/0/0").address;
+		} catch (err) {
+			return `Error: ${err}`;
+		}
+	};   // scope.getAddr
 	
 });   // myApp.controller
 </script>	
