@@ -44,7 +44,7 @@ myApp.controller("myCtrl", function($scope, $http) {
 	
 	$scope.checkMnemonic = () => {
 		res = "";
-		if (mnemonic.length != 12) res += `Mnemonic is not twelve words`;
+		if ($scope.mnemonic.length != 12) res += `Mnemonic is not twelve words`;
 		
 		return res;
 	};  // $scope.checkMnemonic
