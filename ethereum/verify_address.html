@@ -25,11 +25,11 @@
 
     
 <script>
-var myApp = angular.module("myApp", ['ngSanitize']);
+var myApp = angular.module("myApp", []);
 var scope;
 	
 	
-myApp.controller("myCtrl", function($scope) {
+myApp.controller("myCtrl", function($scope, $http) {
 	// Make the scope available outside the controller, which is very useful for
 	// debugging
   	scope = $scope;
@@ -38,15 +38,10 @@ myApp.controller("myCtrl", function($scope) {
 	
 	$scope.wordlist = new Array();
 	
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = () => {
-    		if (this.readyState == 4 && this.status == 200) 
-			$scope.wordlist = this.responseText;
-	};  // xhttp.onreadystatechange
-	xhttp.open("GET", "https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt", true);
-	xhttp.send();	
-	
-	
+	$http.get("https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt").
+		then(resp => $scope.wordlist = resp.data);
+
+		
 });   // myApp.controller
 </script>	
 	
