@@ -29,7 +29,7 @@ var myApp = angular.module("myApp", []);
 var scope;
 	
 	
-myApp.controller("myCtrl", async function($scope, $http) {
+myApp.controller("myCtrl", function($scope, $http) {
 	// Make the scope available outside the controller, which is very useful for
 	// debugging
   	scope = $scope;
@@ -38,9 +38,10 @@ myApp.controller("myCtrl", async function($scope, $http) {
 	
 	$scope.wordlist = new Array();
 	
-	resp = await $http.get("https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt");
+	// Use .then because an Angular controller doesn't work if it is declared as async 
+	$http.get("https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt").
+		then(resp => $scope.wordlist = resp.data.split(" "));
 	
-	$scope.wordlist = resp.data;
 });   // myApp.controller
 </script>	
 	
