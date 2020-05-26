@@ -40,7 +40,7 @@ myApp.controller("myCtrl", function($scope, $http) {
 	
 	// Use .then because an Angular controller doesn't work if it is declared as async 
 	$http.get("https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt").
-		then(resp => $scope.wordlist = resp.data.split(" "));
+		then(resp => $scope.wordlist = resp.data.split("\n"));
 	
 });   // myApp.controller
 </script>	
