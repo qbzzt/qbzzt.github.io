@@ -27,7 +27,8 @@
 <script>
 var myApp = angular.module("myApp", ['ngSanitize']);
 var scope;
-
+	
+	
 myApp.controller("myCtrl", function($scope) {
 	// Make the scope available outside the controller, which is very useful for
 	// debugging
@@ -35,21 +36,17 @@ myApp.controller("myCtrl", function($scope) {
 
 	$scope.mnemonic = new Array(12);
 	
-	$scope.entropy = '0x';
-
-	$scope.getHex = () => "0123456789abcdef"[Date.now() % 16]
-	$scope.addHex = () => $scope.entropy += $scope.getHex();
-	$scope.entropyLeft = () => 34-$scope.entropy.length;
-
-	$scope.getMnemonic = () => $scope.entropyLeft() == 0 ? 
-		ethers.utils.HDNode.entropyToMnemonic($scope.entropy) : "";
-
-	$scope.getAddr = () => $scope.entropyLeft() == 0 ? 
-		ethers.utils.HDNode.fromMnemonic(
-			ethers.utils.HDNode.entropyToMnemonic($scope.entropy)
-		).derivePath("m/44'/60'/0'/0/0").address : "";
-
-
+	$scope.wordlist = new Array();
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = () => {
+    		if (this.readyState == 4 && this.status == 200) 
+			$scope.wordlist = this.responseText;
+	};  // xhttp.onreadystatechange
+	xhttp.open("GET", "https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt", true);
+	xhttp.send();	
+	
+	
 });   // myApp.controller
 </script>	
 	
@@ -68,10 +65,10 @@ myApp.controller("myCtrl", function($scope) {
 
 <div class="panel panel-info">
 	<div class="panel-heading">
-		<h3 class="panel-title">Mnemonic</h3>
+		<h3 class="panel-title">Word List</h3>
 	</div>
 	<div class="panel-body">
-		{{getMnemonic()}}
+		{{wordlist}}
 	</div>
 </div>
 
@@ -81,15 +78,9 @@ myApp.controller("myCtrl", function($scope) {
 		<h3 class="panel-title">Address</h3>
 	</div>
 	<div class="panel-body">
-		{{getAddr()}}
+		{{wordlist}}
 	</div>
 </div>
-
-
-<button type="button" 
-	class="btn btn-primary btn-lg" ng-click="addHex()" ng-disabled="entropyLeft() == 0">
-	{{entropyLeft()}} clicks left
-</button>
 
 
 </body>
