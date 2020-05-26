@@ -46,7 +46,7 @@ myApp.controller("myCtrl", function($scope, $http) {
 		res = "";
 		if ($scope.mnemonic.length != 12) res += `Mnemonic is not twelve words</br>`;
 		for(var i=0; i<$scope.mnemonic.length; i++) 
-			if (wordlist.indexOf($scope.mnemonic[i] == -1)
+			if (wordlist.indexOf($scope.mnemonic[i]) == -1)
 			    	res += `${$scope.mnemonic[i]} is not in the mnemonic word list</br>`;
 		
 		return res;
