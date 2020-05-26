@@ -68,7 +68,7 @@ myApp.controller("myCtrl", function($scope, $http) {
 	</div>
 </div>
 	
-<div class="alert alert-danger" ng-if="checkMnemonic()">
+<div class="alert alert-danger" ng-if="checkMnemonic().length > 0">
 	<ul class="list-group">
 		<li ng-repeat="err in checkMnemonic()" class="list-group-item">{{err}}</li>
 	</ul>
