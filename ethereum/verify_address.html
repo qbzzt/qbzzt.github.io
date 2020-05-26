@@ -43,11 +43,11 @@ myApp.controller("myCtrl", function($scope, $http) {
 		then(resp => $scope.wordlist = resp.data.split("\n"));
 	
 	$scope.checkMnemonic = () => {
-		res = "";
-		if ($scope.mnemonic.length != 12) res += `Mnemonic is not twelve words\n`;
+		res = new Array();
+		if ($scope.mnemonic.length != 12) res.push(`Mnemonic is not twelve words`);
 		for(var i=0; i<$scope.mnemonic.length; i++) 
 			if ($scope.wordlist.indexOf($scope.mnemonic[i]) == -1)
-			    	res += `${$scope.mnemonic[i]} is not in the mnemonic word list\n`;
+			    	res.push(`${$scope.mnemonic[i]} is not in the mnemonic word list`);
 		
 		return res;
 	};  // $scope.checkMnemonic
@@ -64,12 +64,14 @@ myApp.controller("myCtrl", function($scope, $http) {
       		<h3 class="panel-title">The Mnemonic</h3>
         </div>
        	<div class="panel-body">
-		<input type="text" ng-model="mnemonic" ng-list=" " ng-trim="false">
+		<textarea ng-model="mnemonic" ng-list=" " ng-trim="false">
 	</div>
 </div>
 	
 <div class="alert alert-danger" ng-if="checkMnemonic()">
-	{{checkMnemonic()}}
+	<ul class="list-group">
+		<li ng-repeat="err in checkMnemonic()" class="list-group-item">{{err}}</li>
+	</ul>
 </div>
 
 <!--	
