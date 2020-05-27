@@ -1,0 +1,120 @@
+
+<html>
+<head>
+<title>Counter Test App</title>
+
+<script src="https://cdn.ethers.io/scripts/ethers-v4.min.js"
+        charset="utf-8" type="text/javascript">
+</script>
+
+
+<script>
+const counterData = {
+   address: '0xB2086099f3b764a167B923A670bf8A7FbD46A1c6',
+   abi: [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "Asked4Value",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "increment",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ] // the ABI from Counter.json
+};  // counterData
+
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+const writeToDiv = (divName, text) => {
+	document.getElementById(divName).innerHTML += `${text}<br>`;
+};   // writeToDiv
+
+
+var incrementInvoked = 0;
+
+const increment = async () => {
+	await window.ethereum.enable();
+
+	const contract = await new ethers.Contract(
+		counterData.address, counterData.abi,
+		provider.getSigner()
+	);
+
+	incrementInvoked++;
+	writeToDiv("increment", `Increment #${incrementInvoked}`);
+
+	const transaction = await contract.increment();
+	const sentTime = Date.now();
+	const hash = transaction.hash;
+	writeToDiv("increment", `Transaction hash: ${hash}`);
+
+	const receipt = await provider.waitForTransaction(hash);
+	writeToDiv("increment", `Mined in block: ${receipt.blockNumber}`);
+	writeToDiv("increment", `Transaction time: ${(Date.now()-sentTime)/1000} seconds`);
+};   // increment
+
+
+
+const getUpdates = async () => {
+	const dataLengthBits = 256;
+	const dataLengthHex = dataLengthBits/4;
+
+	const contract = await new ethers.Contract(
+		counterData.address, counterData.abi,
+		provider
+	);
+
+	contract.on(contract.interface.events.Asked4Value,
+		evt => {
+			writeToDiv("events", `Increment #${incrementInvoked}`);
+			writeToDiv("events", `Got an event: ${JSON.stringify(evt)}`);
+			writeToDiv("events", 
+				`Counter value: ${
+					parseInt(evt.data.substring(0, dataLengthHex+2))
+				}`
+			);
+		}
+	);   // contract.on
+};   // getUpdates
+
+
+getUpdates();
+
+
+</script>
+
+</head>
+
+<body>
+<h2>Counter Test App</h2>
+
+<button onClick="increment()">Increment</button>
+
+<h4>Increment results</h4>
+<div id="increment"></div>
+
+<h4>Events</h4>
+<div id="events"></div>
+
+</body>
+</html>
