@@ -10,44 +10,47 @@
 
 <body>
   
-  <h2>Zero Knowledge Rollups in Ethereum</h2>
-  <h4>Ori Pomerantz qbzzt1@gmail.com</h4>
+<h2>Zero Knowledge Rollups in Ethereum</h2>
+<h4>Ori Pomerantz qbzzt1@gmail.com</h4>
 
 In this article you learn about the scaling problem in Ethereum, and how zero knowledge rollups can
 solve it.
-  
-  </p>
-  
+
   <h3>Background: Consensus and Scaling</h3>
 
-  Rather than relying on a trusted central authority, blockchains rely on consensus. The problem is
+Rather than relying on a trusted central authority, blockchains rely on consensus. The problem is
 that consensus doesn't scale very well. This problem is especially bad in Ethereum, because nodes don't 
 just relay data, they have to actually execute the software that is embedded in contracts. In December
 2019, <a href="https://blog.bybit.com/research-and-analysis/ethereum-blockchain-performance-and-scalability"
 target="_blank"> Ethereum averaged 12-15 transactions per second</a>.
 This is enough to develop the technology and ecosystem, but not nearly enough for mass market adoption.
 
+  <h4>Is This Really Necessary?</h4>
   
-  <!--
-## 
-
-
-
-### Is This Really Necessary?
-
 If we examine the problem, it's not really necessary for all the nodes to run the program for a 
 transaction. At least one node has to actually run the program to get from the input state of the
 contract to the output state, but other nodes can get the proposed output state and just verify
 that it is correct. Surprisingly, this second task can be accomplished much more easily using a 
-field of cryptography called [Zero Knowledge Proofs](https://en.wikipedia.org/wiki/Zero-knowledge_proof).
+field of cryptography called 
+<a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof" target="_blank">Zero Knowledge Proofs</a>.
 
-
-## Mathematical Building Blocks
-
+  <h3>Mathematical Building Blocks</h3>
 To explain how it is possible to verify a program's output without running it requires several 
-mathematical building blocks beyond those of basic cryptography ([hash 
-functions](https://en.wikipedia.org/wiki/Cryptographic_hash_function), [private/public key
-pairs](https://en.wikipedia.org/wiki/Public-key_cryptography), and so on).
+mathematical building blocks beyond those of basic cryptography 
+(<a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function" target="_blank">hash functions</a>,
+<a href="https://en.wikipedia.org/wiki/Public-key_cryptography" target="_blank">private/public key
+pairs, and so on).  
+  
+<!--
+
+<a href="" target="_blank"></a>
+
+
+
+
+## 
+
+
 
 
 ### Commitments
