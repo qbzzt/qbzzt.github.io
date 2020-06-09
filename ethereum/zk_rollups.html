@@ -41,25 +41,21 @@ mathematical building blocks beyond those of basic cryptography
 <a href="https://en.wikipedia.org/wiki/Public-key_cryptography" target="_blank">private/public key
 pairs, and so on).  
   
+  
+  <h4>Commitments</h4>
+
+The first building block we need to understand is commitments. A 
+<a href="https://en.wikipedia.org/wiki/Commitment_scheme" target="_blank">cryptographic commitment</a>  
+is a message signed by a participant, that commits the participant to certain information without revealing that information. 
+In the future, that participant can release the information, or a function of that information, and the recipients of the 
+commitments will be able to verify that it is indeed the committed information.  
+  
 <!--
 
 <a href="" target="_blank"></a>
 
 
 
-
-## 
-
-
-
-
-### Commitments
-
-The first building block we need to understand is commitments. A [cryptographic 
-commitment](https://en.wikipedia.org/wiki/Commitment_scheme) is a message signed by a participant, that 
-commits the participant to certain information without revealing that information. In the future, that 
-participant can release the information, or a function of that information, and the recipients of the 
-commitments will be able to verify that it is indeed the committed information.
 
 A very simple example is signing the output of a hash function. I have some information, 
 <img src="https://latex.codecogs.com/gif.latex?I" alt="I">. In the 
