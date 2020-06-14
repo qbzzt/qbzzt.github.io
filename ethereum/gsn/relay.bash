@@ -45,7 +45,7 @@ services:
 END
 cat >.env <<END
 HOST=qbzzt.duckdns.org
-NODE_URK=https://kovan.infura.io/v3/455c4353c93d4b0092c542f38cceed41
+NODE_URL=https://kovan.infura.io/v3/455c4353c93d4b0092c542f38cceed41
 RELAY_HUB=0x2E0d94754b348D208D64d52d78BcD443aFA9fa52
 
 #can't use localhost: must specify device IP
