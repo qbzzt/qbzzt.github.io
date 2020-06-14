@@ -5,8 +5,8 @@ cat >docker-compose.bash <<END
 
 docker run --rm \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        -v "$PWD:$PWD" \
-        -w "$PWD" \
+        -v "\$PWD:\$PWD" \
+        -w "\$PWD" \
         docker/compose:1.24.0 $*
 
 END
@@ -22,11 +22,11 @@ services:
       - '443:443'
     restart: always
     environment:
-      DOMAINS: '${HOST} -> http://gsn'
+      DOMAINS: '\${HOST} -> http://gsn'
       STAGE: 'production'
 
   gsn:
-    image: opengsn/jsrelay:\$\{JSRELAY\}
+    image: opengsn/jsrelay:\${JSRELAY}
     restart: always
     ports:
       - '8090:80' #needed for debugging without https frontend
@@ -35,13 +35,13 @@ services:
     volumes:
       - ./gsndata:/app/data    #can be left out, to keep private-key inside the docker
     environment:
-      url: https://\$\{HOST\}
+      url: https://\${HOST}
       port: 80
-      ethereumNodeUrl: \$\{NODE_URL\}
-      relayHubAddress: \$\{RELAY_HUB\}
-      gasPricePercent: \$\{GAS_PRICE_PERCENT\}
-      baseRelayFee: \$\{BASE_FEE\}
-      pctRelayFee: \$\{PERCENT_FEE\}
+      ethereumNodeUrl: \${NODE_URL}
+      relayHubAddress: \${RELAY_HUB}
+      gasPricePercent: \${GAS_PRICE_PERCENT}
+      baseRelayFee: \${BASE_FEE}
+      pctRelayFee: \${PERCENT_FEE}
 END
 cat >.env <<END
 HOST=qbzzt.duckdns.org
