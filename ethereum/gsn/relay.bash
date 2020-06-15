@@ -3,7 +3,7 @@
 cat >docker-compose.bash <<END
 #! /bin/bash
 
-docker run --rm /var/run/docker.sock:/var/run/docker.sock -v "\$PWD:\$PWD" -w "\$PWD" docker/compose:1.24.0 up -d
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "\$PWD:\$PWD" -w "\$PWD" docker/compose:1.24.0 up -d
 
 END
 chmod +x docker-compose.bash
