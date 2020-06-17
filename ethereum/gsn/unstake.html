@@ -1,8 +1,530 @@
 <html>
 <head>
-<title>Unstake</title>
+<title>Unstake a GSN Relay</title>
+
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+<!--  Angular  -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+
+    
+<!-- Ethers -->
+<script src="https://cdn.ethers.io/scripts/ethers-v4.min.js"></script>
+
+
+<script>
+
+var myApp = angular.module("myApp", []);
+provider = new ethers.providers.Web3Provider(window.ethereum);
+var scope;
+
+
+const stakeMgrAddr = {
+	"kovan": "0x0ecf783407C5C80D71CFEa37938C0b60BD255FF8",
+	"ropsten": "0x41c7C7c1Bf501e2F43b51c200FEeEC87540AC925"
+};  // stakeMgrAddr
+
+
+const abi = [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayHub",
+          "type": "address"
+        }
+      ],
+      "name": "HubAuthorized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayHub",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "removalBlock",
+          "type": "uint256"
+        }
+      ],
+      "name": "HubUnauthorized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "stake",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "unstakeDelay",
+          "type": "uint256"
+        }
+      ],
+      "name": "StakeAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "beneficiary",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "reward",
+          "type": "uint256"
+        }
+      ],
+      "name": "StakePenalized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "withdrawBlock",
+          "type": "uint256"
+        }
+      ],
+      "name": "StakeUnlocked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "StakeWithdrawn",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "authorizedHubs",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "removalBlock",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "stakes",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "stake",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unstakeDelay",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "withdrawBlock",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "versionSM",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        }
+      ],
+      "name": "getStakeInfo",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "stake",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "unstakeDelay",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "withdrawBlock",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address payable",
+              "name": "owner",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct IStakeManager.StakeInfo",
+          "name": "stakeInfo",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unstakeDelay",
+          "type": "uint256"
+        }
+      ],
+      "name": "stakeForAddress",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        }
+      ],
+      "name": "unlockStake",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        }
+      ],
+      "name": "withdrawStake",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "relayHub",
+          "type": "address"
+        }
+      ],
+      "name": "authorizeHub",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "relayHub",
+          "type": "address"
+        }
+      ],
+      "name": "unauthorizeHub",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "minAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "minUnstakeDelay",
+          "type": "uint256"
+        }
+      ],
+      "name": "isRelayManagerStaked",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "relayManager",
+          "type": "address"
+        },
+        {
+          "internalType": "address payable",
+          "name": "beneficiary",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "penalizeRelayManager",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ];   // abi for StakeManager
+
+
+
+myApp.controller("myCtrl", function($scope) {
+	// Make the scope available outside the controller, which is very useful for
+	// debugging
+  	scope = $scope;
+
+	$scope.supportedNets = Object.keys(stakeMgrAddr);
+
+	$scope.update = async () => {
+		await window.ethereum.enable();
+		await provider.getNetwork();
+
+		$scope.network = provider.network.name;
+		$scope.stakeMgrAddr = stakeMgrAddr[$scope.network];
+
+		// This is asynchronous, so we need
+		// to tell Angular it's time to
+		// update
+		$scope.$apply();
+	}; // $scope.update
+
+	$scope.unlock = async addr => {
+		const stakeMgr = await new ethers.Contract($scope.stakeMgrAddr, abi, provider.getSigner());
+		const transaction = await stakeMgr.unlockStake(addr);
+		const receipt = await provider.waitForTransaction(transaction.hash);
+		console.log(receipt);
+
+
+		stakeMgr.on(stakeMgr.interface.events.StakeUnlocked, 
+			evt => console.log(JSON.stringify(evt)));
+	};   // $scope.unlock
+
+	$scope.withdraw = async addr => {
+		const stakeMgr = await new ethers.Contract($scope.stakeMgrAddr, abi, provider.getSigner());
+		const transaction = await stakeMgr.withdrawStake(addr);
+		const receipt = await provider.waitForTransaction(transaction.hash);
+		console.log(receipt);
+
+
+		stakeMgr.on(stakeMgr.interface.events.StakeWithdrawn, 
+			evt => console.log(JSON.stringify(evt)));
+	};
+
+});   // myApp.controller "myCtrl"
+
+
+// When the net changes, update our information. It is hard to trigger a change 
+// outside of the controller, so just reload.
+ethereum.on('networkChanged', net => location.reload());
+
+
+</script>
+
 </head>
-<body>
-<h2>Unstake a GSN relay</h2>
+
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="update()">
+<h2>Unstake a GSN Relay</h2>
+
+<div class="panel panel-primary" ng-if="stakeMgrAddr">
+	<div class="panel-heading">
+		<h3 class="panel-title">Network information</h3>
+	</div>
+	<div class="panel-body">
+		{{network}}
+		</br>
+		{{stakeMgrAddr}}
+		</br>
+		<form name="forAngularJS">
+		<div class="form-group">
+  			<label for="relayAddrInp">RelayManagerAddress:</label>
+  			<input type="text" class="form-control" id="relayAddrInp" 
+				name="relayAddrInp" ng-model="relayAddr">
+		</div>
+		</form>
+		<button class="btn btn-lg btn-primary" ng-click="unlock(relayAddr)">
+		Unlock your stake
+		</button>
+		<button class="btn btn-lg btn-primary" ng-click="withdraw(relayAddr)">
+		Withdraw previously unlocked stake
+		</button>
+	</div>
+</div>   <!-- primary panel, only if there's a StakeManagerAddress -->
+
+<div class="panel panel-danger" ng-if="!stakeMgrAddr">
+	<div class="panel-heading">
+		<h3 class="panel-title">Unsupported network {{network}}</h3>
+	</div>
+	<div class="panel-body">
+		Currently supported:
+		<ul class="list-group">
+  			<li class="list-group-item" ng-repeat="net in supportedNets">{{net}}</li>
+		</ul>
+	</div>
+</div>   <!-- danger panel, only if there's no StakeManagerAddress -->
+
+
 </body>
 </html>
