@@ -74,7 +74,21 @@ myApp.controller("myCtrl", function($scope) {
 	
     $scope.polyMulScalar = (p, s) => p.map(v => v*s)
     $scope.polyAddPoly = (p1, p2) => p1.map((v1, i) => v1+p2[i])
-
+	
+    $scope.updatePolys = () => {
+    	$scope.u = polyAddPoly(polyMulScalar(ua,a), polyMulScalar(ub,b));
+    	$scope.v = polyAddPoly(polyMulScalar(vb,b), polyMulScalar(vc,c));	    
+    };    // $scope.updatePolys
+    $scope.updatePolys();
+    $scope.$watch("a", () => $scope.updatePolys());
+    $scope.$watch("b", () => $scope.updatePolys());
+    $scope.$watch("c", () => $scope.updatePolys());
+    $scope.$watch("propTemp1", () => $scope.updatePolys());
+    $scope.$watch("propTemp2", () => $scope.updatePolys());
+    $scope.$watch("propTemp3", () => $scope.updatePolys());
+    $scope.$watch("propD", () => $scope.updatePolys());	
+		
+	
 });   // myApp.controller
 </script>
 
@@ -196,14 +210,12 @@ myApp.controller("myCtrl", function($scope) {
       <tr><th colspan="2">Overall Polynoms</th></tr>		  
       <tr>
 	<td>u = au<sub>a</sub>+bu<sub>b</sub>
-	<td ng-bind-html="
-			  poly2html(
-			  	polyAddPoly(
-			  		polyMulScalar(ua,a),
-			  		polyMulScalar(ub,b)
-			  	)
-			  )"</td>
+	<td ng-bind-html="poly2html(u)"</td>
       </tr>
+      <tr>
+	<td>v = bv<sub>b</sub>+cv<sub>c</sub>
+	<td ng-bind-html="poly2html(v)"</td>
+      </tr>		  
     </table>
 	</div>   <!-- class="panel-body" -->
 </div>     <!-- class="panel"      -->
