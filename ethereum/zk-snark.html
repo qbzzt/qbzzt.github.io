@@ -169,9 +169,7 @@ myApp.controller("myCtrl", function($scope) {
         <td>w<sub>d</sub></td>
         <td ng-bind-html="poly2html(wd)">  </td>
       </tr>
-      <tr>
-        <th colspan="2">Proposed Values</th>
-      </tr>
+      <tr><th colspan="2">Proposed Values</th></tr>
       <tr><td>a</td><td>{{a}}</td></tr>
       <tr><td>b</td><td>{{b}}</td></tr>
       <tr><td>c</td><td>{{c}}</td></tr>
@@ -191,6 +189,11 @@ myApp.controller("myCtrl", function($scope) {
         <td>d</td><td><input type="number" ng-model="propD">
         <div class="badge pull-right" ng-show="d != propD">instead of {{d}}</div>
       </td></tr>
+      <tr><th colspan="2">Overall Polynoms</th></tr>		  
+      <tr>
+	<td>u = au<sub>a</sub>+bu<sub>b</sub>
+	<td ng-bind-html=poly2html([2,3,4,5])</td>
+      </tr>
     </table>
 	</div>   <!-- class="panel-body" -->
 </div>     <!-- class="panel"      -->
