@@ -196,7 +196,13 @@ myApp.controller("myCtrl", function($scope) {
       <tr><th colspan="2">Overall Polynoms</th></tr>		  
       <tr>
 	<td>u = au<sub>a</sub>+bu<sub>b</sub>
-	<td ng-bind-html="poly2html(polyAddPoly(polyMulScalar(ua,a),polyMulScalar(ub,b)))"</td>
+	<td ng-bind-html="
+			  poly2html(
+			  	polyAddPoly(
+			  		polyMulScalar(ua,a),
+			  		polyMulScalar(ub,b)
+			  	)
+			  )"</td>
       </tr>
     </table>
 	</div>   <!-- class="panel-body" -->
