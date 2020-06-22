@@ -59,7 +59,7 @@ myApp.controller("myCtrl", function($scope) {
     $scope.$watch("c", () => $scope.update());
 
     // A polynomial is represented as a
-    // list, l[0]*x^3 + L[1]*x^2 + L[2]*x + L[3]
+    // list, l[0]*x^3 + L[1]*x^2 + l[2]*x + l[3]
     $scope.poly2html = poly =>
       `${poly[0]}x<sup>3</sup>+${poly[1]}x<sup>2</sup>+${poly[2]}x+${poly[3]}`;
 
@@ -186,7 +186,7 @@ myApp.controller("myCtrl", function($scope) {
       </td></tr>
       <tr>
         <td>d</td><td><input type="number" ng-model="propD">
-        <span ng-show="d != propD">Correct value is {{d}}</span>
+        <span class="badge float-right" ng-show="d != propD">instead of {{d}}</span>
       </td></tr>
     </table>
 	</div>   <!-- class="panel-body" -->
