@@ -1,4 +1,3 @@
-
 <html>
 <head>
 <title>Sample Zero Knowledge Proof</title>
@@ -13,17 +12,17 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    
+
 <!--  Angular  -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-sanitize.js"></script>
 
-<!-- Ether -->
+<!-- Ether
 <script src="https://cdn.ethers.io/scripts/ethers-v4.min.js"
         charset="utf-8" type="text/javascript">
 </script>
+-->
 
-    
 <script>
 var myApp = angular.module("myApp", ['ngSanitize']);
 var scope;
@@ -37,9 +36,44 @@ myApp.controller("myCtrl", function($scope) {
     $scope.b = 0;
     $scope.c = -16;
 
+    $scope.propTemp1 = 0;
+    $scope.propTemp2 = 0;
+    $scope.propTemp3 = 0;
+    $scope.propD = 0;
+
+    $scope.update = () => {
+      $scope.temp1 = $scope.a * $scope.c;
+      $scope.temp2 = -4 * $scope.temp1;
+      $scope.temp3 = $scope.b * $scope.b;
+      $scope.d = $scope.temp3 + $scope.temp2;
+
+      // Update the proposed value to be true ones
+      $scope.propTemp1 = $scope.temp1;
+      $scope.propTemp2 = $scope.temp2;
+      $scope.propTemp3 = $scope.temp3;
+      $scope.propD = $scope.d;
+    };   // $scope.update
+    $scope.update();
+    $scope.$watch("a", () => $scope.update());
+    $scope.$watch("b", () => $scope.update());
+    $scope.$watch("c", () => $scope.update());
+
+    // A polynomial is represented as a
+    // list, l[0]*x^3 + L[1]*x^2 + L[2]*x + L[3]
+    $scope.poly2html = poly =>
+      `${poly[0]}x<sup>3</sup>+${poly[1]}x<sup>2</sup>+${poly[2]}x+${poly[3]}`;
+
+    $scope.ua = [-1/6, 3/2, -13/3, 4];
+    $scope.vc = $scope.ua;
+    $scope.ub = [-1/2, 7/2, -7, 4];
+    $scope.vb = $scope.ub;
+    $scope.wtemp1 = [-13/6, 35/2, -127/3, 28];
+    $scope.wtemp2 = [-2/3, 5, -34/3, 7];
+    $scope.wtemp3 = [-2/3, 9/2, -53/6, 5];
+    $scope.wd = [1/6, -1, 11/6, -1]
 });   // myApp.controller
-</script>	
-	
+</script>
+
 </head>
 <body ng-app="myApp" ng-controller="myCtrl">
 
@@ -56,16 +90,104 @@ myApp.controller("myCtrl", function($scope) {
       </tr>
       <tr>
         <td>a</td>
-	<td><input type="number" ng-model="a"></td>
+	      <td><input type="number" ng-model="a"></td>
       </tr>
       <tr>
         <td>b</td>
-	<td><input type="number" ng-model="b"></td>
-      </tr>	
+	      <td><input type="number" ng-model="b"></td>
+      </tr>
       <tr>
         <td>c</td>
-	<td><input type="number" ng-model="c"></td>
-      </tr>		  
+	      <td><input type="number" ng-model="c"></td>
+      </tr>
+      <tr><th colspan="2">Calculated Results</th></tr>
+      <tr>
+        <td>temp1 = a*c</td>
+        <td>{{temp1}}</td>
+      </tr>
+      <tr>
+        <td>temp2 = -4*temp2</td>
+        <td>{{temp2}}</td>
+      </tr>
+      <tr>
+        <td>temp3 = b*b</td>
+        <td>{{temp3}}</td>
+      </tr>
+      <tr>
+        <td>d = temp3+temp2</td>
+        <td>{{d}}</td>
+      </tr>
+      <tr><th colspan="2">Constraints</th></tr>
+      <tr>
+        <td>a*c-temp1</td>
+        <td>{{a*c-temp1}}</td>
+      </tr>
+      <tr>
+        <td>4*temp1+temp2</td>
+        <td>{{4*temp1+temp2}}</td>
+      </tr>
+      <tr>
+        <td>b*b-temp3</td>
+        <td>{{b*b-temp3}}</td>
+      </tr>
+      <tr>
+        <td>temp3+temp2-d</td>
+        <td>{{temp3+temp2-d}}</td>
+      </tr>
+      <tr>
+        <th colspan="2">Constraint Polynoms</th>
+      </tr>
+      <tr>
+        <td>u<sub>a</sub></td>
+        <td ng-bind-html="poly2html(ua)">  </td>
+      </tr>
+      <tr>
+        <td>u<sub>b</sub></td>
+        <td ng-bind-html="poly2html(ub)">  </td>
+      </tr>
+      <tr>
+        <td>v<sub>b</sub></td>
+        <td ng-bind-html="poly2html(vb)">  </td>
+      </tr>
+      <tr>
+        <td>v<sub>c</sub></td>
+        <td ng-bind-html="poly2html(vc)">  </td>
+      </tr>
+      <tr>
+        <td>w<sub>temp1</sub></td>
+        <td ng-bind-html="poly2html(wtemp1)">  </td>
+      </tr>
+      <tr>
+        <td>w<sub>temp2</sub></td>
+        <td ng-bind-html="poly2html(wtemp2)">  </td>
+      </tr>
+      <tr>
+        <td>w<sub>temp3</sub></td>
+        <td ng-bind-html="poly2html(wtemp3)">  </td>
+      </tr>
+      <tr>
+        <td>w<sub>d</sub></td>
+        <td ng-bind-html="poly2html(wd)">  </td>
+      </tr>
+      <tr>
+        <th colspan="2">Proposed Values</th>
+      </tr>
+      <tr><td>a</td><td>{{a}}</td></tr>
+      <tr><td>b</td><td>{{b}}</td></tr>
+      <tr><td>c</td><td>{{c}}</td></tr>
+      <tr>
+        <td>temp1</td><td><input type="number" ng-model="propTemp1">
+      </td></tr>
+      <tr>
+        <td>temp2</td><td><input type="number" ng-model="propTemp2">
+      </td></tr>
+      <tr>
+        <td>temp3</td><td><input type="number" ng-model="propTemp3">
+      </td></tr>
+      <tr>
+        <td>d</td><td><input type="number" ng-model="propD">
+        <span ng-show="d != propD">Correct value is {{d}}</span>
+      </td></tr>
     </table>
 	</div>   <!-- class="panel-body" -->
 </div>     <!-- class="panel"      -->
