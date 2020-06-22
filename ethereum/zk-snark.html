@@ -177,12 +177,15 @@ myApp.controller("myCtrl", function($scope) {
       <tr><td>c</td><td>{{c}}</td></tr>
       <tr>
         <td>temp1</td><td><input type="number" ng-model="propTemp1">
+        <div class="badge pull-right" ng-show="temp1 != propTemp1">instead of {{temp1}}</div>	     	      
       </td></tr>
       <tr>
         <td>temp2</td><td><input type="number" ng-model="propTemp2">
+        <div class="badge pull-right" ng-show="temp2 != propTemp2">instead of {{temp2}}</div>	     	      
       </td></tr>
       <tr>
         <td>temp3</td><td><input type="number" ng-model="propTemp3">
+        <div class="badge pull-right" ng-show="temp3 != propTemp3">instead of {{temp3}}</div>	      
       </td></tr>
       <tr>
         <td>d</td><td><input type="number" ng-model="propD">
