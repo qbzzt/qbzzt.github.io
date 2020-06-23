@@ -208,19 +208,31 @@ myApp.controller("myCtrl", function($scope) {
       <tr><td>c</td><td>{{c}}</td></tr>
       <tr>
         <td>temp1</td><td><input type="number" ng-model="propTemp1">
-        <div class="badge pull-right" ng-show="temp1 != propTemp1">instead of {{temp1}}</div>
+        <button class="btn btn-info pull-right" ng-show="temp1 != propTemp1"
+            ng-click="propTemp1 = temp1">
+          Reset to {{temp1}}
+        </button>
       </td></tr>
       <tr>
         <td>temp2</td><td><input type="number" ng-model="propTemp2">
-        <div class="badge pull-right" ng-show="temp2 != propTemp2">instead of {{temp2}}</div>
+          <button class="btn btn-info pull-right" ng-show="temp2 != propTemp2"
+              ng-click="propTemp2 = temp2">
+            Reset to {{temp2}}
+          </button>
       </td></tr>
       <tr>
         <td>temp3</td><td><input type="number" ng-model="propTemp3">
-        <div class="badge pull-right" ng-show="temp3 != propTemp3">instead of {{temp3}}</div>
+          <button class="btn btn-info pull-right" ng-show="temp3 != propTemp3"
+              ng-click="propTemp3 = temp3">
+            Reset to {{temp3}}
+          </button>
       </td></tr>
       <tr>
         <td>d</td><td><input type="number" ng-model="propD">
-        <div class="badge pull-right" ng-show="d != propD">instead of {{d}}</div>
+          <button class="btn btn-info pull-right" ng-show="d != propD"
+              ng-click="propD = d">
+            Reset to {{d}}
+          </button>
       </td></tr>
       <tr><th colspan="2">Overall Polynoms</th></tr>
       <tr>
@@ -236,11 +248,22 @@ myApp.controller("myCtrl", function($scope) {
            temp3w<sub>temp3</sub>+dw<sub>d</sub>+
 	       <td ng-bind-html="poly2html(w)"</td>
       </tr>
-      <tr><th colspan="2">Results</th></tr>
+    </table>
+
+    <h3>Results</h3>
+    <table class="table">
+      <tr>
+        <td>x</td>
+        <td>u(x)</td>
+        <td>v(x)</td>
+        <td>w(x)</td>
+        <td>u(x)*v(x)-w(x)</td>
       <tr ng-repeat="step in [1, 2, 3, 4]">
         <td>{{step}}</td>
+        <td>{{round(evalPoly(u, step))}}</td>
+        <td>{{round(evalPoly(v, step))}}</td>
+        <td>{{round(evalPoly(w, step))}}</td>
         <td ng-class="round(overallEval(step)) == 0 ? 'success' : 'danger'">
-          u({{step}})v({{step}})-w({{step}}) =
           {{ round(overallEval(step)) }}
         </td>
       </tr>
