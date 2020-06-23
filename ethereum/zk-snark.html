@@ -58,10 +58,13 @@ myApp.controller("myCtrl", function($scope) {
     $scope.$watch("b", () => $scope.update());
     $scope.$watch("c", () => $scope.update());
 
+    $scope.round = x => Math.round(x*1000)/1000
+
     // A polynomial is represented as a
     // list, l[0]*x^3 + L[1]*x^2 + l[2]*x + l[3]
     $scope.poly2html = poly =>
-      `${poly[0]}x<sup>3</sup>+${poly[1]}x<sup>2</sup>+${poly[2]}x+${poly[3]}`;
+      `${$scope.round(poly[0])}x<sup>3</sup>+${$scope.round(poly[1])}x<sup>2</sup>
+      +${$scope.round(poly[2])}x+${$scope.round(poly[3])}`;
 
     $scope.ua = [-1/6, 3/2, -13/3, 4];
     $scope.vc = $scope.ua;
@@ -71,13 +74,22 @@ myApp.controller("myCtrl", function($scope) {
     $scope.wtemp2 = [-2/3, 5, -34/3, 7];
     $scope.wtemp3 = [-2/3, 9/2, -53/6, 5];
     $scope.wd = [1/6, -1, 11/6, -1]
-	
+
     polyMulScalar = (p, s) => p.map(v => v*s)
     polyAddPoly = (p1, p2) => p1.map((v1, i) => v1+p2[i])
-	
+
+    $scope.evalPoly = (p, x) => p[0]*x*x*x+p[1]*x*x+p[2]*x+p[3]
+
     $scope.updatePolys = () => {
-    	$scope.u = polyAddPoly(polyMulScalar(ua,a), polyMulScalar(ub,b));
-    	$scope.v = polyAddPoly(polyMulScalar(vb,b), polyMulScalar(vc,c));	    
+    	$scope.u = polyAddPoly(polyMulScalar($scope.ua,$scope.a),
+                  polyMulScalar($scope.ub,$scope.b));
+    	$scope.v = polyAddPoly(polyMulScalar($scope.vb,$scope.b),
+                  polyMulScalar($scope.vc,$scope.c));
+      $scope.w = polyAddPoly(
+        polyAddPoly(polyMulScalar($scope.wtemp1, $scope.propTemp1),
+                    polyMulScalar($scope.wtemp2, $scope.propTemp2)),
+        polyAddPoly(polyMulScalar($scope.wtemp3, $scope.propTemp3),
+                    polyMulScalar($scope.wd, $scope.propD)))
     };    // $scope.updatePolys
     $scope.updatePolys();
     $scope.$watch("a", () => $scope.updatePolys());
@@ -86,9 +98,12 @@ myApp.controller("myCtrl", function($scope) {
     $scope.$watch("propTemp1", () => $scope.updatePolys());
     $scope.$watch("propTemp2", () => $scope.updatePolys());
     $scope.$watch("propTemp3", () => $scope.updatePolys());
-    $scope.$watch("propD", () => $scope.updatePolys());	
-		
-	
+    $scope.$watch("propD", () => $scope.updatePolys());
+
+    $scope.overallEval = x => $scope.evalPoly($scope.u, x) *
+                              $scope.evalPoly($scope.v, x) -
+                              $scope.evalPoly($scope.w, x)
+
 });   // myApp.controller
 </script>
 
@@ -193,29 +208,42 @@ myApp.controller("myCtrl", function($scope) {
       <tr><td>c</td><td>{{c}}</td></tr>
       <tr>
         <td>temp1</td><td><input type="number" ng-model="propTemp1">
-        <div class="badge pull-right" ng-show="temp1 != propTemp1">instead of {{temp1}}</div>	     	      
+        <div class="badge pull-right" ng-show="temp1 != propTemp1">instead of {{temp1}}</div>
       </td></tr>
       <tr>
         <td>temp2</td><td><input type="number" ng-model="propTemp2">
-        <div class="badge pull-right" ng-show="temp2 != propTemp2">instead of {{temp2}}</div>	     	      
+        <div class="badge pull-right" ng-show="temp2 != propTemp2">instead of {{temp2}}</div>
       </td></tr>
       <tr>
         <td>temp3</td><td><input type="number" ng-model="propTemp3">
-        <div class="badge pull-right" ng-show="temp3 != propTemp3">instead of {{temp3}}</div>	      
+        <div class="badge pull-right" ng-show="temp3 != propTemp3">instead of {{temp3}}</div>
       </td></tr>
       <tr>
         <td>d</td><td><input type="number" ng-model="propD">
         <div class="badge pull-right" ng-show="d != propD">instead of {{d}}</div>
       </td></tr>
-      <tr><th colspan="2">Overall Polynoms</th></tr>		  
+      <tr><th colspan="2">Overall Polynoms</th></tr>
       <tr>
-	<td>u = au<sub>a</sub>+bu<sub>b</sub>
-	<td ng-bind-html="poly2html(u)"</td>
+	      <td>u = au<sub>a</sub>+bu<sub>b</sub>
+	      <td ng-bind-html="poly2html(u)"</td>
       </tr>
       <tr>
-	<td>v = bv<sub>b</sub>+cv<sub>c</sub>
-	<td ng-bind-html="poly2html(v)"</td>
-      </tr>		  
+	       <td>v = bv<sub>b</sub>+cv<sub>c</sub>
+	       <td ng-bind-html="poly2html(v)"</td>
+      </tr>
+      <tr>
+	       <td>w = temp1w<sub>temp1</sub> + temp2w<sub>temp2</sub> +
+           temp3w<sub>temp3</sub>+dw<sub>d</sub>+
+	       <td ng-bind-html="poly2html(w)"</td>
+      </tr>
+      <tr><th colspan="2">Results</th></tr>
+      <tr ng-repeat="step in [1, 2, 3, 4]">
+        <td>{{step}}</td>
+        <td ng-class="round(overallEval(step)) == 0 ? 'success' : 'danger'">
+          u({{step}})v({{step}})-w({{step}}) =
+          {{ round(overallEval(step)) }}
+        </td>
+      </tr>
     </table>
 	</div>   <!-- class="panel-body" -->
 </div>     <!-- class="panel"      -->
