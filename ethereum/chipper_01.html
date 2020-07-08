@@ -656,7 +656,7 @@ myApp.controller("myCtrl", function($scope) {
 			$scope.contract.interface.events.Message,
 			evt => {
 				const eventData = $scope.contract.interface.parseLog(evt);
-				console.log(eventData.values)
+				console.log(eventData)
 				$scope.messages.unshift({
 					message: eventData.values._message,
 					sender: eventData.values._sender
