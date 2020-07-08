@@ -705,7 +705,8 @@ myApp.controller("myCtrl", function($scope) {
        	<div class="panel-body">
 		<ul class="list-group">
 			<li class="list-group-item" ng-repeat="msg in messages">
-				{{msg.sender}}: {{msg.message}}
+				<a href="https://kovan.etherscan.io/address/{{msg.sender}}",
+				   target="_blank">{{msg.sender}}</a>: {{msg.message}}
 			</li>
 		</ul>
 	</div>
