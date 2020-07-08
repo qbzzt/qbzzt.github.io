@@ -656,10 +656,10 @@ myApp.controller("myCtrl", function($scope) {
 			$scope.contract.interface.events.Message,
 			evt => {
 				const eventData = $scope.contract.interface.parseLog(evt);
-				console.log(evt)
 				$scope.messages.unshift({
 					message: eventData.values._message,
-					sender: eventData.values._sender
+					sender: eventData.values._sender,
+					txn: evt.transactionHash
 				})
 				$scope.$apply()    // update the UI
 			}
@@ -705,8 +705,10 @@ myApp.controller("myCtrl", function($scope) {
        	<div class="panel-body">
 		<ul class="list-group">
 			<li class="list-group-item" ng-repeat="msg in messages">
-				<a href="https://kovan.etherscan.io/address/{{msg.sender}}",
-				   target="_blank">{{msg.sender}}</a>: {{msg.message}}
+				<a href="https://kovan.etherscan.io/address/{{msg.sender}}"
+				   target="_blank">{{msg.sender}}</a>:
+				<a href="https://kovan.etherscan.io/tx/{{msg.tnx}}"
+				   target="_blank">{{msg.message}}</a>
 			</li>
 		</ul>
 	</div>
