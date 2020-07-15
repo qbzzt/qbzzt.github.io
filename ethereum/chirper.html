@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>Chirper</title>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+<!--  Angular  -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-sanitize.js"></script>
+
+<!-- Ether -->
+<script src="https://cdn.ethers.io/scripts/ethers-v4.min.js"
+        charset="utf-8" type="text/javascript">
+</script>
+
+
+<script src="bundle.js">
+</script>
+
+
+<script>
+
+var myApp = angular.module("myApp", [])
+var scope
+var lookBack = 100000   // number of blocks to look back from chirps
+
+
+myApp.controller("myCtrl", function($scope) {
+	// Make $scope available outside the controller
+	scope = $scope
+
+	$scope.newMsg = ""
+	$scope.messages = []
+	$scope.filter = ""
+
+	$scope.sendMsg = async msg => await window.app.sendMsg(msg)
+	$scope.sendFreeMsg = async msg => await window.app.sendFreeMsg(msg)
+
+	// No need for the value, this is just a way to 
+	// run an async function from within a normal one
+	var valueIrrelevant = window.app.listenChirps($scope)
+
+	$scope.filteredMessages = $scope.messages
+
+	$scope.$watch('filter', () =>
+		$scope.filteredMessages = $scope.filter === "" ? $scope.messages : 
+			$scope.messages.filter(msg => msg.message.search($scope.filter) != -1)
+	)    // $scope.$watch('filter' ...)
+
+})  // myApp.controller
+
+
+
+</script>
+
+
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+<h2>Chirper</h2>
+
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+      		<h3 class="panel-title">Chirp a Message</h3>
+        </div>
+       	<div class="panel-body">
+		<input type="text" class="form-control" ng-model="newMsg">
+		</br>
+		<button class="btn btn-primary" ng-click="sendMsg(newMsg)">
+			Chirp
+		</button>
+		<button class="btn btn-success" ng-click="sendFreeMsg(newMsg)">
+			Free Chirp
+		</button>
+	</div>
+</div>   <!-- panel-primary user message -->
+
+
+<div class="panel panel-info">
+	<div class="panel-heading">
+      		<h3 class="panel-title">Latest Messages</h3>
+        </div>
+       	<div class="panel-body">
+		<input type="text" class="form-control" ng-model="filter">
+		</br>
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="msg in filteredMessages">
+				<a href="https://kovan.etherscan.io/address/{{msg.sender}}"
+				   target="_blank">{{msg.sender}}</a>:
+				<a href="https://kovan.etherscan.io/tx/{{msg.txn}}"
+				   target="_blank">{{msg.message}}</a>
+			</li>
+		</ul>
+	</div>
+</div>   <!-- panel-info messages -->
+
+
+</body>
+</html>
