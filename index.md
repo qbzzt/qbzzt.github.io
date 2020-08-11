@@ -13,6 +13,8 @@ for programmers who want to write a decentralized app and don't know where to st
 [GSNv2](https://www.opengsn.org/) for a decentralized app that does not require users to own and spend ether to use it.
 1. [Creating a Paper Wallet Address](https://github.com/qbzzt/etherdocs/blob/master/paper_wallet.md). How to create and use
 a paper wallet.
+1. [Getting Started with Retesteth](https://github.com/ethereum/retesteth/blob/develop/docs/gettingStarted.md). The basics
+of testing Ethereum clients (their name for nodes).
 
 
 ### Files
