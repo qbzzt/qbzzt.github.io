@@ -53,5 +53,5 @@ SERVER_CONFIG_FILE=server-config.json
 #PERCENT_FEE=
 
 #docker image tag
-JSRELAY=0.9.0
+JSRELAY=2.0.0
 END
