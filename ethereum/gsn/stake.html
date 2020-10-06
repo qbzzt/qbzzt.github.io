@@ -30,7 +30,7 @@ const versionRegistryAddr = {
 	"kovan": "0x570EFB87a19367cDbD715039b4aC38554b308896",
 	"ropsten": "0x666eaf8628FEb3389003ef69C57fE4ebaae2aAF5",
 	"mainnet": "0x31e861242d3fDCD1cAeF4b2c802E06c5E8A8E0b5"
-};  // stakeMgrAddr
+};  // versionRegistryAddr
 
 
 const abi = [
@@ -437,7 +437,7 @@ myApp.controller("myCtrl", function($scope) {
 	// debugging
   	scope = $scope;
 
-	$scope.supportedNets = Object.keys(stakeMgrAddr);
+	$scope.supportedNets = Object.keys(versionRegistryAddr);
 
 	$scope.update = async () => {
 		await window.ethereum.enable();
