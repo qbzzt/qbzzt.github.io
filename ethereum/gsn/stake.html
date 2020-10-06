@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Unstake a GSN Relay</title>
+<title>Stake a GSN Relay</title>
 
 
 <!-- jQuery -->
@@ -26,10 +26,10 @@ provider = new ethers.providers.Web3Provider(window.ethereum);
 var scope;
 
 
-const stakeMgrAddr = {
-	"kovan": "0x93e4F8d0904a52F8a7304066499a6B2B77260ce1",
-	"ropsten": "0x762A4D5F51d8b2F9bA1B0412B45687cE0EfFD92B",
-	"mainnet": "0xcAA46E3a5D2c3c07A0C4F7723c7977c3e643C2B1"
+const versionRegistryAddr = {
+	"kovan": "0x570EFB87a19367cDbD715039b4aC38554b308896",
+	"ropsten": "0x666eaf8628FEb3389003ef69C57fE4ebaae2aAF5",
+	"mainnet": "0x31e861242d3fDCD1cAeF4b2c802E06c5E8A8E0b5"
 };  // stakeMgrAddr
 
 
@@ -444,8 +444,8 @@ myApp.controller("myCtrl", function($scope) {
 		await provider.getNetwork();
 
 		$scope.network = provider.network.name;
-		$scope.stakeMgrAddr = stakeMgrAddr[$scope.network];
-
+		$scope.versionRegistryAddr = versionRegistryAddr[$scope.network];
+		
 		// This is asynchronous, so we need
 		// to tell Angular it's time to
 		// update
@@ -487,7 +487,7 @@ ethereum.on('networkChanged', net => location.reload());
 </head>
 
 <body ng-app="myApp" ng-controller="myCtrl" ng-init="update()">
-<h2>Unstake a GSN Relay</h2>
+<h2>Stake a GSN Relay</h2>
 
 <div class="panel panel-primary" ng-if="stakeMgrAddr">
 	<div class="panel-heading">
@@ -496,7 +496,7 @@ ethereum.on('networkChanged', net => location.reload());
 	<div class="panel-body">
 		{{network}}
 		</br>
-		{{stakeMgrAddr}}
+		{{versionRegistryAddr}}
 		</br>
 		<form name="forAngularJS">
 		<div class="form-group">
@@ -512,9 +512,9 @@ ethereum.on('networkChanged', net => location.reload());
 		Withdraw previously unlocked stake
 		</button>
 	</div>
-</div>   <!-- primary panel, only if there's a StakeManagerAddress -->
+</div>   <!-- primary panel, only if there's a versionRegistryAddr -->
 
-<div class="panel panel-danger" ng-if="!stakeMgrAddr">
+<div class="panel panel-danger" ng-if="!versionRegistryAddr">
 	<div class="panel-heading">
 		<h3 class="panel-title">Unsupported network {{network}}</h3>
 	</div>
@@ -524,7 +524,7 @@ ethereum.on('networkChanged', net => location.reload());
   			<li class="list-group-item" ng-repeat="net in supportedNets">{{net}}</li>
 		</ul>
 	</div>
-</div>   <!-- danger panel, only if there's no StakeManagerAddress -->
+</div>   <!-- danger panel, only if there's no versionRegistryAddr -->
 
 
 </body>
