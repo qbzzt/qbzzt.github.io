@@ -479,7 +479,7 @@ myApp.controller("myCtrl", function($scope) {
 
 // When the net changes, update our information. It is hard to trigger a change 
 // outside of the controller, so just reload.
-ethereum.on('networkChanged', net => location.reload());
+ethereum.on('chainChanged', net => location.reload());
 
 
 </script>
