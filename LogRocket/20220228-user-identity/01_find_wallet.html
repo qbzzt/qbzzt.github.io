@@ -37,7 +37,7 @@
 	<body>
 		<h2>Hello {{addr}}</h2>
 		<button ng-if="isWallet()"
-			onClick="window.ethereum.request({method: 'eth_requestAccounts'})"
+			ng-click="connect()"
 		>
 			Connect to Ethereum
 		</button>
