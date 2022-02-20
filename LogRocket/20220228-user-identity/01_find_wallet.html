@@ -23,7 +23,7 @@
 
 	myApp.controller("myCtrl", function($scope, $http) {
   		scope = $scope
-		$scope.addr = ""
+		$scope.addr = []
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
@@ -35,13 +35,16 @@
 	</script>
 	
 	<body>
-		<h2>Hello {{addr}}</h2>
-		<button ng-if="isWallet()"
-			ng-click="connect()"
-		>
+		<div ng-if="isWallet()">
+			<h2 ng-if="addr.length > 0">Hello {{addr}}</h2>
+			<button ng-if="addr.length == 0" ng-click="connect()">
 			Connect to Ethereum
-		</button>
-
+			</button>
+		</div>    <!-- ng-if="isWallet()" -->
+		<div ng-if="!isWallet()">
+			To use this application, please install MataMask or
+			some other Ethereum browser plug-in.
+		</div>
 
   	</body>
 </html>
