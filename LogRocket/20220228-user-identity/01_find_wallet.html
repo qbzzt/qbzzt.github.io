@@ -22,19 +22,21 @@
 	var scope;
 
 	myApp.controller("myCtrl", function($scope, $http) {
-  		scope = $scope;
+  		scope = $scope
+		$scope.addr = ""
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
+		$scope.connect = () => {
+			window.ethereum.request({method: 'eth_requestAccounts'})
+				.then(arr => $scope.addr = arr[0])
+
+		}    // $scope.connect
 	});
 	
 	</script>
 	
 	<body>
-		<table>
-			<tr><th>Is there a wallet?</th></tr>
-			<tr><td>{{isWallet()}}</td></tr>
-		</table>
-
-		<button
+		<h2>Hello {{addr}}</h2>
+		<button ng-if="isWallet()"
 			onClick="window.ethereum.request({method: 'eth_requestAccounts'})"
 		>
 			Connect to Ethereum
