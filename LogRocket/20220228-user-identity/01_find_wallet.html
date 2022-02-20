@@ -22,6 +22,7 @@
 
 	myApp.controller("myCtrl", function($scope, $http) {
   		scope = $scope;
+		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 	});
 	
 	</script>
@@ -33,7 +34,7 @@
   				<h3 type="panel-title">Do we see a wallet?</h3>
   			</div>
   			<div type="panel-body">
-				{{window.ethereum}}
+				{{isWallet()}}
 			</div>
 		</div>
 
