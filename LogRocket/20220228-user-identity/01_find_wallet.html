@@ -34,15 +34,12 @@
 			<tr><td>{{isWallet()}}</td></tr>
 		</table>
 
+		<button
+			onClick="window.ethereum.request({method: 'eth_requestAccounts'})"
+		>
+			Connect to Ethereum
+		</button>
 
-  		<div type="panel panel-primary">
-  			<div type="panel-heading">
-  				<h3 type="panel-title">Do we see a wallet?</h3>
-  			</div>
-  			<div type="panel-body">
-				
-			</div>
-		</div>
 
   	</body>
 </html>
