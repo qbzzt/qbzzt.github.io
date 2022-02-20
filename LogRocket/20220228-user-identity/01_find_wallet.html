@@ -2,7 +2,7 @@
 <html ng-app="myApp" ng-controller="myCtrl">
 
   <head>
-    <title>Sending information to a Clojure app</title>
+    <title>Identifying if a user has a wallet</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -21,9 +21,6 @@
 
 	myApp.controller("myCtrl", function($scope, $http) {
   		scope = $scope;
-  		$scope.get = "GET method";
-  		$scope.post = "POST method";
-  		$scope.path = "component"
 	});
 	
 	</script>
@@ -31,50 +28,12 @@
 	<body>
   		<div type="panel panel-info">
   			<div type="panel-heading">
-  				<h3 type="panel-title">PATH</h3>
+  				<h3 type="panel-title">Do we see a wallet?</h3>
   			</div>
   			<div type="panel-body">
-					<input type="text" name="path" id="path" ng-model="path">
-					<a ng-href="process-path/{{path}}">process-path/{{path}}</a>
+				Hello, world
 			</div>
 		</div>
-
-
-  		<div type="panel panel-info">
-  			<div type="panel-heading">
-  				<h3 type="panel-title">GET</h3>
-  			</div>
-  			<div type="panel-body">
-				<form role="form" action="process-form" method="get">
-					<input type="text" class="form-control" name="get" id="get" ng-model="get">
-					<button type="submit" class="btn btn-default">Submit</button>
-				</form>
-			</div>
-		</div>
-
-  		<div type="panel panel-info">
-  			<div type="panel-heading">
-  				<h3 type="panel-title">POST</h3>
-  			</div>
-  			<div type="panel-body">
-				<form role="form" action="process-form" method="post">
-					<input type="text" class="form-control" name="post" id="post" ng-model="post">
-					<button type="submit" class="btn btn-default">Submit</button>
-				</form>
-			</div>
-		</div>
-		
-  		<div type="panel panel-info">
-  			<div type="panel-heading">
-  				<h3 type="panel-title">All together</h3>
-  			</div>
-  			<div type="panel-body">
-				<form role="form" action="{{'merge/' + path + '?getParam=' + get}}" method="post">
-					<input type="text" class="form-control" name="post" id="post" ng-model="post">
-					<button type="submit" class="btn btn-default">Submit</button>
-				</form>
-			</div>
-		</div>		
 	
   	</body>
 </html>
