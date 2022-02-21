@@ -23,7 +23,12 @@
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
-			.then(arr => $scope.addr = arr[0], err => {
+			.then(arr => {
+				$scope.addr = arr[0]
+				$scope.error = ""
+				$scope.$digest()
+				},    // success
+				err => {
 				$scope.error = err.message
 				$scope.$digest()
 			})   // error
@@ -33,9 +38,9 @@
 	</script>
 	
 	<body>
-<!--		<div ng-if="Object.keys(error)">   -->
+		<div ng-if="error">   
 			<h2>Error: {{error}}</h2>
-<!--		</div>   -->
+		</div>   
 		<div ng-if="isWallet()">
 			<h2 ng-if="addr">Address: {{addr}}</h2>
 			<button ng-if="!addr" ng-click="connect()">
