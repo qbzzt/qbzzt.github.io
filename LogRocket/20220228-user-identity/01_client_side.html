@@ -22,10 +22,10 @@
 		$scope.err = ""
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 		$scope.connect = () => {
-			try {
-				window.ethereum.request({method: 'eth_requestAccounts'})
-				.then(arr => $scope.addr = arr[0],  // success
-				      err => $scope.error = err)    // failure
+			window.ethereum.request({method: 'eth_requestAccounts'})
+			.then(arr => $scope.addr = arr[0])
+			//	,  // success
+			//	      err => $scope.error = err)    // failure
 		}    // $scope.connect
 	});
 	
