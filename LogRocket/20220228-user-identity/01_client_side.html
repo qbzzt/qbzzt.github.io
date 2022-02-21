@@ -24,7 +24,7 @@
 		$scope.connect = () => {
 			try {
 				window.ethereum.request({method: 'eth_requestAccounts'})
-				.then(arr => $scope.addr = arr[0]),  // success
+				.then(arr => $scope.addr = arr[0],  // success
 				      err => $scope.error = err)    // failure
 		}    // $scope.connect
 	});
