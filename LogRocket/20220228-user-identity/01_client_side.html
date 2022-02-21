@@ -24,15 +24,13 @@
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
 			.then(arr => $scope.addr = arr[0], err => $scope.err = err)
-			//	,  // success
-			//	      err => $scope.error = err)    // failure
 		}    // $scope.connect
 	});
 	
 	</script>
 	
 	<body>
-		<div ng-if="Object.keys(scope.err)">
+		<div ng-if="Object.keys(err)">
 			<h2>Error: {{err}}</h2>
 		</div>
 		<div ng-if="isWallet()">
