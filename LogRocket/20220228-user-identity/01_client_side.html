@@ -23,7 +23,7 @@
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
-			.then(arr => $scope.addr = arr[0])
+			.then(arr => $scope.addr = arr[0], err => console.log(err))
 			//	,  // success
 			//	      err => $scope.error = err)    // failure
 		}    // $scope.connect
