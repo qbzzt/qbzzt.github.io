@@ -19,7 +19,7 @@
 	myApp.controller("myCtrl", function($scope, $http) {
   		scope = $scope
 		$scope.addr = ""
-		$scope.err = ""
+		$scope.err = {}
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
@@ -32,7 +32,7 @@
 	</script>
 	
 	<body>
-		<div ng-if="err">
+		<div ng-if="Object.keys(scope.err)">
 			<h2>Error: {{err}}</h2>
 		</div>
 		<div ng-if="isWallet()">
