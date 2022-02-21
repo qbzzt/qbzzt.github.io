@@ -18,7 +18,7 @@
 
 	myApp.controller("myCtrl", function($scope, $http) {
   		scope = $scope
-		$scope.addr = []
+		$scope.addr = ""
 		$scope.err = ""
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 		$scope.connect = () => {
@@ -31,12 +31,12 @@
 	</script>
 	
 	<body>
-		<div ng-if="$err">
-			<h2>Error: ${err}</h2>
+		<div ng-if="err">
+			<h2>Error: {{err}}</h2>
 		</div>
 		<div ng-if="isWallet()">
-			<h2 ng-if="addr.length > 0">Address: {{addr}}</h2>
-			<button ng-if="addr.length == 0" ng-click="connect()">
+			<h2 ng-if="addr">Address: {{addr}}</h2>
+			<button ng-if="!addr" ng-click="connect()">
 			Connect to Ethereum
 			</button>
 		</div>    <!-- ng-if="isWallet()" -->
