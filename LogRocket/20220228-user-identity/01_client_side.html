@@ -24,7 +24,7 @@
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
 				.then(arr => $scope.addr = arr[0])
-				.fail(err => $scope.error = err)
+				.catch(err => $scope.error = err)
 		}    // $scope.connect
 	});
 	
@@ -42,7 +42,7 @@
 		</div>    <!-- ng-if="isWallet()" -->
 		<div ng-if="!isWallet()">
 			To use this application, please install 
-			<a href="https://metamask.io">MataMask</a> or
+			<a href="https://metamask.io">MetaMask</a> or
 			some other Ethereum wallet.
 		</div>
 
