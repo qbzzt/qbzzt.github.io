@@ -19,11 +19,11 @@
 	myApp.controller("myCtrl", function($scope, $http) {
   		scope = $scope
 		$scope.addr = ""
-		$scope.error = {}
+		$scope.error = ""
 		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
-			.then(arr => $scope.addr = arr[0], err => $scope.error = err)
+			.then(arr => $scope.addr = arr[0], err => $scope.error = err.message)
 		}    // $scope.connect
 	});
 	
