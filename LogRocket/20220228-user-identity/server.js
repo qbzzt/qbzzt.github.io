@@ -34,13 +34,25 @@ app.get("/session", (req, res) => {
 
 
 app.get("/signature", (req, res) => {
-
+  let error = "", realAddr = ""
   const expectedMsg = `My session ID: ${req.sessionID}`
   const hash = ethers.utils.id(`\x19Ethereum Signed Message:\n${expectedMsg.length}${expectedMsg}`)
-  console.log(ethers.utils.recoverAddress(hash, req.query.sig))
-  console.log(req.query.addr)
+  const claimedAddr = req.query.addr
 
-  res.send("OK")
+  try {
+    realAddr = ethers.utils.recoverAddress(hash, req.query.sig)
+  } catch (err) {
+    error = err.reason
+  }
+
+  if (error)  {
+    res.send(`ERROR: ${error}`)
+  } else {
+    if (realAddr.toLowerCase() === claimedAddr.toLowerCase())
+      res.send(`Legitimate, welcome ${realAddr}`)
+    else
+      res.send(`Fraud!!! You are not ${claimedAddr}, you are ${realAddr}!`)
+  } // if (error) else
 
 })     // app.get("signature/:sig/:addr")
 

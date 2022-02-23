@@ -19,6 +19,8 @@
 	myApp.controller("myCtrl", function($scope, $http) {
   		scope = $scope
 		$scope.addr = ""
+		$scope.fakeAddr = "0x1bad60a72bad60a73bad60a74bad60a75bad60a7"		
+		$scope.authResult = ""
 		$scope.error = ""
 		$scope.sessionId = ""
 		$scope.$http = $http
@@ -31,7 +33,7 @@
 				$scope.addr = arr[0]
 				$scope.error = ""
 				$scope.$digest()
-				},    // success
+			},    // success
 				err => {
 				$scope.error = err.message
 				$scope.$digest()
@@ -39,7 +41,7 @@
 		}    // $scope.connect
 
 
-		$scope.sign = async () => {
+		$scope.sign = async addr => {
 			const res = await $scope.$http.get("/session")
 			$scope.sessionId = res.data
 
@@ -49,14 +51,27 @@
 				params: [`My session ID: ${$scope.sessionId}`, $scope.addr, ""]
 			})
 
-			console.log($scope.walletResp)
-
-
-			const sigUrl = `/signature?sig=${$scope.walletResp}&addr=${$scope.addr}`
-			const resSig = await $scope.$http.get(sigUrl)
+			const sigUrl = `/signature?sig=${$scope.walletResp}&addr=${addr}`
+			$scope.authResult = (await $scope.$http.get(sigUrl)).data
 
 			$scope.$digest()
 		}    // $scope.sign
+
+		$scope.invalidSign = async addr => {
+
+			// An Ethereum signature is 0x followed by 130 hexadecimal digits (65 bytes)
+			let badSig = "0x"
+			const hex = "0123456789ABCDEF"
+
+			for(var i=0; i<130; i++)
+				badSig = badSig + hex.slice(Math.random()*16).slice(0,1)
+
+			const sigUrl = `/signature?sig=${badSig}&addr=${addr}`
+			$scope.authResult = (await $scope.$http.get(sigUrl)).data
+
+			$scope.$digest()
+		}    // $scope.invalidSign
+
 	})    // myApp.controller
 	
 	</script>
@@ -69,10 +84,23 @@
 		<div ng-if="isWallet()">
 			<div ng-if="addr">
 				<h2>Address: {{addr}}</h2>
-				<button ng-click="sign()">
-				Identify yourself to the server
+				<button ng-click="sign(addr)">
+					Identify yourself to the server (legitimately)
 				</button>
-			</div>
+				<br>
+				<button ng-click="sign(fakeAddr)">
+					Identify yourself to the server (as {{fakeAddr}})
+				</button>
+				<br>
+				<button ng-click="invalidSign(addr)">
+					Submit an invalid signature
+				</button>
+				<br>				
+				<div ng-if="authResult">
+					<h4>Authentication Result:</h4>
+					{{authResult}}
+				</div>
+			</div>   <!-- ng-if="addr" -->
 			<button ng-if="!addr" ng-click="connect()">
 			Connect to Ethereum
 			</button>
