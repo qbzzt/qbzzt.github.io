@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="myCtrl">
+
+  <head>
+    <title>Server-side user identification</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+    <!--  Use the Angular library  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+    
+	<script>
+	/*eslint-env browser */
+	var myApp = angular.module("myApp", []);
+	var scope;
+
+	myApp.controller("myCtrl", function($scope, $http) {
+  		scope = $scope
+		$scope.addr = ""
+		$scope.error = ""
+		$scope.sessionId = ""
+		$scope.$http = $http
+		$scope.isWallet = () => typeof window.ethereum !== 'undefined'
+
+
+		$scope.connect = () => {
+			window.ethereum.request({method: 'eth_requestAccounts'})
+			.then(arr => {
+				$scope.addr = arr[0]
+				$scope.error = ""
+				$scope.$digest()
+				},    // success
+				err => {
+				$scope.error = err.message
+				$scope.$digest()
+			})   // error
+		}    // $scope.connect
+
+
+		$scope.sign = async () => {
+			const res = await $scope.$http.get("/session")
+			$scope.sessionId = res.data
+
+			$scope.walletResp = await window.ethereum.request(
+			{
+			    method: "personal_sign",
+				params: [`My session ID: ${$scope.sessionId}`, $scope.addr, ""]
+			})
+
+			console.log($scope.walletResp)
+
+
+			const sigUrl = `/signature?sig=${$scope.walletResp}&addr=${$scope.addr}`
+			const resSig = await $scope.$http.get(sigUrl)
+
+			$scope.$digest()
+		}    // $scope.sign
+	})    // myApp.controller
+	
+	</script>
+	
+	<body>
+		{{signMe}}
+		<div ng-if="error">   
+			<h2>Error: {{error}}</h2>
+		</div>   
+		<div ng-if="isWallet()">
+			<div ng-if="addr">
+				<h2>Address: {{addr}}</h2>
+				<button ng-click="sign()">
+				Identify yourself to the server
+				</button>
+			</div>
+			<button ng-if="!addr" ng-click="connect()">
+			Connect to Ethereum
+			</button>
+		</div>    <!-- ng-if="isWallet()" -->
+		<div ng-if="!isWallet()">
+			To use this application, please install 
+			<a href="https://metamask.io">MetaMask</a> or
+			some other Ethereum wallet.
+		</div>
+
+  	</body>
+</html>
