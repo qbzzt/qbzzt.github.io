@@ -24,13 +24,13 @@
 		$scope.connect = () => {
 			window.ethereum.request({method: 'eth_requestAccounts'})
 			.then(arr => {
-				$scope.addr = arr[0]
-				$scope.error = ""
-				$scope.$digest()
-				},    // success
-				err => {
-				$scope.error = err.message
-				$scope.$digest()
+					$scope.addr = arr[0]
+					$scope.error = ""
+					$scope.$digest()
+			},    // success
+			err => {
+					$scope.error = err.message
+					$scope.$digest()
 			})   // error
 		}    // $scope.connect
 	});

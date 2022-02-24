@@ -54,7 +54,7 @@ app.get("/signature", (req, res) => {
       res.send(`Fraud!!! You are not ${claimedAddr}, you are ${realAddr}!`)
   } // if (error) else
 
-})     // app.get("signature/:sig/:addr")
+})     // app.get("signature")
 
 app.get("*", (req,res) => {
   res.send(`
