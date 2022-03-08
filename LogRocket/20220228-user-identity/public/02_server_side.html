@@ -57,7 +57,7 @@
 			$scope.$digest()
 		}    // $scope.sign
 
-		$scope.invalidSign = async addr => {
+		$scope.randomSign = async addr => {
 
 			// An Ethereum signature is 0x followed by 130 hexadecimal digits (65 bytes)
 			let badSig = "0x"
@@ -70,7 +70,7 @@
 			$scope.authResult = (await $scope.$http.get(sigUrl)).data
 
 			$scope.$digest()
-		}    // $scope.invalidSign
+		}    // $scope.randomSign
 
 	})    // myApp.controller
 	
@@ -92,8 +92,8 @@
 					Identify yourself to the server (as {{fakeAddr}})
 				</button>
 				<br>
-				<button ng-click="invalidSign(addr)">
-					Submit an invalid signature
+				<button ng-click="randomdSign(addr)">
+					Submit a random signature
 				</button>
 				<br>				
 				<div ng-if="authResult">
