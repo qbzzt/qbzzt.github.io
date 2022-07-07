@@ -13,7 +13,7 @@ const getMsgs = async (chirper, sender) => {
   blockList = (await chirper.getSenderMessages(sender)).map(x => x.toNumber())
 
   blocks = await Promise.all(
-    blockList.map(async x => await ethers.provider.getBlockWithTransactions(x))
+    blockList.map(x => ethers.provider.getBlockWithTransactions(x))
   )
 
   // Get the timestamps
