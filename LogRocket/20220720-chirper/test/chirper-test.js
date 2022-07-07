@@ -50,11 +50,8 @@ describe("Chirper",  async () => {
     Chirper = await ethers.getContractFactory("Chirper")
     chirper = await Chirper.deploy()
 
-    console.log(`Chirper addr: ${chirper.address}`)
-
     for(var i=0; i<messages.length; i++)
       await post(chirper, messages[i])
-
 
     fromAddr = (await ethers.getSigners())[0].address
     receivedMessages = await getMsgs(chirper, fromAddr)
