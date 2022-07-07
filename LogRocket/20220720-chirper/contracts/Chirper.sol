@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-
 contract Chirper {
     // The blocks in which an address posted a message
     mapping (address => uint[]) MessageBlocks;
@@ -11,7 +10,16 @@ contract Chirper {
         // so it becomes part of the transaction.
         (_message);
         require(msg.sender == tx.origin, "Only works when called directly");
-        MessageBlocks[msg.sender].push(block.number);
+
+        // Only add the block number if we don't already a post in this
+        // block
+        uint length = MessageBlocks[msg.sender].length;
+        if (length == 0) {
+            MessageBlocks[msg.sender].push(block.number);
+        } else if (MessageBlocks[msg.sender][length-1] < block.number) {
+            MessageBlocks[msg.sender].push(block.number);
+        }
+
     }   // function post
 
     function getSenderMessages(address sender) public view 
