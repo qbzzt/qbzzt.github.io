@@ -7,7 +7,7 @@ const data2Str = str => String.fromCharCode(...str.split(/([0-9a-f]{2})/).
 
 const getMsgs = async (chirper, sender) => {
   blockList = (await chirper.getSenderMessages(sender)).map(x => x.toNumber())
-  
+
   blocks = await Promise.all(
     blockList.map(async x => await ethers.provider.getBlockWithTransactions(x))
   )
@@ -18,6 +18,7 @@ const getMsgs = async (chirper, sender) => {
 
   // Get the texts
   allTxs = blocks.map(x => x.transactions).flat()
+
   ourTxs = allTxs.filter(x => x.from == sender && x.to == chirper.address)
   msgs = ourTxs.map(x => {return {
     text: data2Str(x.data),
@@ -28,6 +29,12 @@ const getMsgs = async (chirper, sender) => {
 }   // getMsgs
 
 
+const post = async (chirper, msg) => {
+  await (await chirper.post(msg)).wait()
+}    // post
+
+
+
 describe("Chirper",  async () => {
   it("Should return messages posted by a user", async () => {
     messages = ["Hello, world", "Shalom Olam", "Salut Mundi"]
@@ -35,10 +42,11 @@ describe("Chirper",  async () => {
     Chirper = await ethers.getContractFactory("Chirper")
     chirper = await Chirper.deploy()
 
-    messages.map(async msg => {
-      tx = await chirper.post(msg)
-      rcpt = await tx.wait()
-    })
+    console.log(`Chirper addr: ${chirper.address}`)
+
+    for(var i=0; i<messages.length; i++)
+      await post(chirper, messages[i])
+
 
     fromAddr = (await ethers.getSigners())[0].address
     receivedMessages = await getMsgs(chirper, fromAddr)
@@ -54,17 +62,22 @@ describe("Chirper",  async () => {
     chirper1a = chirper1.connect(otherWallet)    
     chirper2 = await Chirper.deploy()
 
-    chirper1.post("Hello, world")
-    chirper2.post("Not relevant") // Different chirper instance
-    chirper1a.post("Hello, world, from somebody else") // Same chirper, different source address
-    chirper1.post("Hello, world, 2nd half")
-    chirper2.post("Not relevant, 2nd half")  // Different chirper instance
-    chirper1a.post("Hello, world, from somebody else") // Same chirper, different source address    
+    await post(chirper1, "Hello, world")
 
-    fromAddr = (await ethers.getSigners())[0].address
-    receivedMessages = await getMsgs(chirper1, fromAddr)
+    // Different chirper instance
+    await post(chirper2, "Not relevant")
+
+    // Same chirper, different source address
+    await post(chirper1a, "Hello, world, from somebody else")
+
+    await post(chirper1, "Hello, world, 2nd half")
+    await post(chirper2, "Also not relevant (different chirper)")
+    await post(chirper1a, "Same chirper, different user, also irrelevant")
+    
+    receivedMessages = await getMsgs(chirper1, 
+        (await ethers.getSigners())[0].address)
     expected = ["Hello, world", "Hello, world, 2nd half"]
-    expected.map((msg,i) => expect(msg).to.equal(receivedMessages[i].text))    
+    expected.map((msg,i) => expect(msg).to.equal(receivedMessages[i].text))     
   })   // it should ignore irrelevant messages
 
 
