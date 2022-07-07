@@ -1,6 +1,4 @@
-const { expect } = require("chai")
-
-
+// The API
 
 const data2Str = str => String.fromCharCode(...str.split(/([0-9a-f]{2})/).
     filter(x => x).map(x => '0x'+x).filter(x => x != '0x00')).slice(7)
@@ -34,6 +32,10 @@ const post = async (chirper, msg) => {
 }    // post
 
 
+
+// The testing code
+
+const { expect } = require("chai")
 
 describe("Chirper",  async () => {
   it("Should return messages posted by a user", async () => {
