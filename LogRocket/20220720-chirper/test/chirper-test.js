@@ -1,7 +1,14 @@
 // The API
 
-const data2Str = str => String.fromCharCode(...str.split(/([0-9a-f]{2})/).
-    filter(x => x).map(x => '0x'+x).filter(x => x != '0x00')).slice(7)
+const data2Str = str => {
+  bytes = str.split(/([0-9a-f]{2})/)
+  usefulBytes = bytes.filter(x => x != "" && x != "00")
+  hexBytes = usefulBytes.map(x => '0x' + x)
+  decodedStr = String.fromCharCode(...hexBytes)
+  result = decodedStr.slice(7)
+
+  return result
+}  // data2Str
 
 const getMsgs = async (chirper, sender) => {
   blockList = (await chirper.getSenderMessages(sender)).map(x => x.toNumber())
