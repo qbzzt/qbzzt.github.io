@@ -1,0 +1,3 @@
+[submodule "EthereumFoundation/20220823-all-u-can-cache/lib/forge-std"]
+	path = EthereumFoundation/20220823-all-u-can-cache/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
